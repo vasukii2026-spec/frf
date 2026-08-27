@@ -259,7 +259,10 @@ async function doLogin() {
     try {
       const health = await fetch('/api/health').then((r) => r.json());
       if (health.database === 'not configured') {
-        msg = 'Server misconfigured: no database connection string set (see /api/health).';
+        const present = health.db_related_env_vars_present || [];
+        msg = present.length
+          ? `No valid DB connection string, but found: ${present.join(', ')} — value looks empty/placeholder, or you haven't redeployed since setting it.`
+          : 'No database env vars found at all. The Neon connection likely isn\'t attached to Production, or you haven\'t redeployed since connecting it.';
       } else if (health.database === 'connection failed') {
         msg = `Cannot reach the database: ${health.error || 'unknown error'} (see /api/health).`;
       } else if (Array.isArray(health.tables_missing) && health.tables_missing.length) {

@@ -37,10 +37,15 @@ app.get('/api/health', async (req, res) => {
   const envVarUsed = pool.__connectionSource;
   try {
     if (!envVarUsed) {
+      const relatedVars = pool.__listDbRelatedEnvVarNames();
       return res.status(500).json({
         ok: false,
         database: 'not configured',
         error: 'No usable Postgres connection string found in any environment variable. Set POSTGRES_URL (or DATABASE_URL) in Vercel → Project → Settings → Environment Variables, then redeploy.',
+        db_related_env_vars_present: relatedVars,
+        note: relatedVars.length
+          ? `Found these env var name(s) but their value didn't look like a real connection string: ${relatedVars.join(', ')}. Either they're empty, still a placeholder, or this deployment hasn't picked up the latest values yet — trigger a fresh deploy.`
+          : 'No database-related environment variables are visible to this function at all. This almost always means: (1) the integration/env var was added AFTER the current deployment was built — env vars only apply to deployments created after you save them, so redeploy; or (2) it was only added for "Preview"/"Development" and not "Production", and you\'re hitting the production URL.',
       });
     }
     const result = await pool.query('SELECT 1 AS ok');

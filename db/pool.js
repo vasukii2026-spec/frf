@@ -50,6 +50,16 @@ function resolveConnectionString() {
   return { value: undefined, source: null };
 }
 
+// For diagnostics only (server.js /api/health): names (never values) of any
+// env var that looks database-related, whether or not it validated as a
+// usable connection string. Lets you tell, from the health check alone,
+// whether Vercel actually injected anything at all vs. injected something
+// that failed validation (e.g. still holds a placeholder).
+function listDbRelatedEnvVarNames() {
+  const pattern = /POSTGRES|DATABASE|NEON|PG_|_PG\b|SQL_URL/i;
+  return Object.keys(process.env).filter((k) => pattern.test(k)).sort();
+}
+
 const { value: connectionString, source } = resolveConnectionString();
 
 if (!connectionString) {
@@ -84,5 +94,6 @@ pool.on('error', (err) => {
 });
 
 pool.__connectionSource = source;
+pool.__listDbRelatedEnvVarNames = listDbRelatedEnvVarNames;
 
 module.exports = pool;
