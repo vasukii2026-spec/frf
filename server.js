@@ -11,6 +11,7 @@ const portfolioRoutes = require('./routes/portfolio');
 const contactRoutes = require('./routes/contact');
 const careerRoutes = require('./routes/career');
 const uploadRoutes = require('./routes/upload');
+const setupRoutes = require('./routes/setup');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/career', careerRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/setup-admin', setupRoutes);
 
 // GET /api/health — checks whether the app can actually reach and query
 // Postgres. Visit this URL directly on your deployed site
@@ -48,15 +50,25 @@ app.get('/api/health', async (req, res) => {
     const tableNames = tables.rows.map((r) => r.table_name);
     const expected = ['admin_users', 'site_settings', 'clients', 'portfolio_items', 'contact_submissions', 'career_submissions'];
     const missing = expected.filter((t) => !tableNames.includes(t));
+
+    let adminUsernames = [];
+    if (tableNames.includes('admin_users')) {
+      const admins = await pool.query('SELECT username FROM admin_users ORDER BY id ASC');
+      adminUsernames = admins.rows.map((r) => r.username);
+    }
+
     res.json({
-      ok: result.rows[0].ok === 1 && missing.length === 0,
+      ok: result.rows[0].ok === 1 && missing.length === 0 && adminUsernames.length > 0,
       database: 'connected',
       connection_env_var: envVarUsed,
       tables_found: tableNames,
       tables_missing: missing,
+      admin_users: adminUsernames,
       note: missing.length
-        ? `Connected fine, but these tables don't exist yet: ${missing.join(', ')}. Run "npm run db:setup" locally with POSTGRES_URL pointed at this same database.`
-        : 'Database connected and all tables present.',
+        ? `Connected fine, but these tables don't exist yet: ${missing.join(', ')}. See "Fix the admin login on Neon" in README.md.`
+        : adminUsernames.length === 0
+        ? 'Connected and tables exist, but there is no admin user yet — that\'s why login fails. See "Fix the admin login on Neon" in README.md.'
+        : 'Database connected, tables present, admin user(s) exist. If login still fails, the password doesn\'t match — use the /api/setup-admin endpoint (see README) to reset it.',
     });
   } catch (err) {
     res.status(500).json({

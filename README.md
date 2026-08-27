@@ -151,6 +151,33 @@ that's a static-file bundling issue, not the database — make sure
 `vercel.json` still has the `"functions": { "api/index.js": { "includeFiles":
 "public/**" } }` block, then redeploy.
 
+## Fix the admin login on Neon (or any Postgres) directly on Vercel
+
+If `/api/health` shows the database connected and tables present but you
+still get "Invalid ID or password" — there's simply no admin user yet (or
+the password doesn't match what you're typing), and you don't need a local
+Node setup pointed at Neon to fix it:
+
+1. In Vercel → your project → Settings → Environment Variables, add
+   `SETUP_SECRET` (any long random string) for Production, then redeploy.
+2. Call this once (replace the placeholders — do this from a terminal, not
+   a browser address bar, since it's a POST request):
+   ```bash
+   curl -X POST https://your-site.vercel.app/api/setup-admin \
+     -H "Content-Type: application/json" \
+     -d '{"secret":"the-SETUP_SECRET-you-just-set","username":"admin","password":"a-new-password-6chars-plus"}'
+   ```
+3. You should get back `{"ok":true,"action":"created",...}` (or
+   `"password reset"` if the user already existed). Log in at your site with
+   that username/password immediately.
+4. Optional but recommended: remove `SETUP_SECRET` from Vercel afterwards
+   (or just keep it private) since anyone who knows it can reset the admin
+   password.
+
+This endpoint also creates any missing tables first, so it doubles as a
+one-shot fix if `npm run db:setup` was never run against your Neon database
+at all.
+
 ## Custom domain
 
 The old site used a `CNAME` file (GitHub Pages style) pointing to
