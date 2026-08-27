@@ -1,0 +1,167 @@
+/* =====================================================================
+   AS GLOBAL ENGINEERING SOLUTIONS — design system
+   Palette sampled directly from the company logo (navy #103f6d / green
+   #84c248). Visual language: technical drawing / blueprint & survey —
+   grid paper, register/tick marks, dimension-line eyebrows.
+   ===================================================================== */
+
+:root {
+  --ink-navy: #103f6d;
+  --accent-green: #84c248;
+  --accent-blue: #4a93c9;
+}
+
+/* Scrollbar */
+.dark ::-webkit-scrollbar { width: 8px; }
+.dark ::-webkit-scrollbar-track { background: #081120; }
+.dark ::-webkit-scrollbar-thumb { background: #84c248; border-radius: 4px; }
+html:not(.dark) ::-webkit-scrollbar { width: 8px; }
+html:not(.dark) ::-webkit-scrollbar-track { background: #eef2f6; }
+html:not(.dark) ::-webkit-scrollbar-thumb { background: #103f6d; border-radius: 4px; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+/* Blueprint / graph-paper backdrop, sits behind all content */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(132,194,72,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(132,194,72,0.07) 1px, transparent 1px),
+    linear-gradient(rgba(132,194,72,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(132,194,72,0.035) 1px, transparent 1px);
+  background-size: 88px 88px, 88px 88px, 22px 22px, 22px 22px;
+}
+html:not(.dark) .bg-grid {
+  background-image:
+    linear-gradient(rgba(16,63,109,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16,63,109,0.06) 1px, transparent 1px),
+    linear-gradient(rgba(16,63,109,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16,63,109,0.03) 1px, transparent 1px);
+}
+
+/* Glass panels */
+.dark .glass { background: rgba(13,28,52,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(132,194,72,0.12); }
+html:not(.dark) .glass { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(16,63,109,0.1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.06); }
+
+/* Gradient text */
+.text-gradient { background: linear-gradient(135deg,#84c248 0%,#4a93c9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+html:not(.dark) .text-gradient { background: linear-gradient(135deg,#6ba334 0%,#3574a3 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+.section-title { letter-spacing: -0.02em; }
+
+/* Eyebrow / dimension-label — technical-drawing style callout */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.eyebrow::before { content: ''; width: 26px; height: 1px; background: currentColor; opacity: 0.6; flex-shrink: 0; }
+.eyebrow.center { justify-content: center; }
+
+/* Corner register / tick marks — surveyor's frame, used sparingly */
+.tick-frame { position: relative; }
+.tick-frame::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  pointer-events: none;
+  color: #84c248;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(to right, currentColor 2px, transparent 2px),
+    linear-gradient(to bottom, currentColor 2px, transparent 2px),
+    linear-gradient(to left, currentColor 2px, transparent 2px),
+    linear-gradient(to bottom, currentColor 2px, transparent 2px),
+    linear-gradient(to right, currentColor 2px, transparent 2px),
+    linear-gradient(to top, currentColor 2px, transparent 2px),
+    linear-gradient(to left, currentColor 2px, transparent 2px),
+    linear-gradient(to top, currentColor 2px, transparent 2px);
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: top left, top left, top right, top right, bottom right, bottom right, bottom left, bottom left;
+}
+
+/* Primary CTA — clipped drafting-stamp corner */
+.btn-primary {
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+}
+
+/* Service cards */
+.service-card { position: relative; overflow: hidden; transition: all 0.5s cubic-bezier(0.4,0,0.2,1); }
+.service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg,#84c248,#4a93c9); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+.service-card:hover::before { transform: scaleX(1); }
+.dark .service-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(132,194,72,0.15); border-color: rgba(132,194,72,0.4); }
+html:not(.dark) .service-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(16,63,109,0.15); border-color: rgba(16,63,109,0.3); }
+
+.icon-badge { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; flex-shrink: 0; }
+.icon-badge.badge-green { background: rgba(132,194,72,0.12); border: 1px solid rgba(132,194,72,0.3); }
+.icon-badge.badge-blue { background: rgba(74,147,201,0.12); border: 1px solid rgba(74,147,201,0.3); }
+
+.reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+.reveal.active { opacity: 1; transform: translateY(0); }
+.counter-value { font-variant-numeric: tabular-nums; }
+
+.nav-link { position: relative; }
+.nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #84c248; transition: width 0.3s ease; }
+.nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+.loader-overlay { position: fixed; inset: 0; background: #081120; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
+html:not(.dark) .loader-overlay { background: #f4f7fb; }
+.loader-hidden { opacity: 0; pointer-events: none; }
+.loader-bar { width: 64px; height: 64px; border-radius: 50%; border: 3px solid rgba(132,194,72,0.15); border-top-color: #84c248; border-right-color: #4a93c9; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.theme-toggle { transition: all 0.3s ease; }
+.theme-toggle:hover { transform: rotate(15deg) scale(1.1); }
+
+.whatsapp-pulse { animation: whatsappPulse 2s infinite; }
+@keyframes whatsappPulse { 0% { box-shadow: 0 0 0 0 rgba(37,211,102,0.7); } 70% { box-shadow: 0 0 0 15px rgba(37,211,102,0); } 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); } }
+
+.logo-container { border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; background: white; border: 3px solid #84c248; box-shadow: 0 4px 15px rgba(132,194,72,0.3); flex-shrink: 0; }
+.logo-container img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+.footer-logo { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: white; border: 2px solid #84c248; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.footer-logo img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+
+.form-input { width: 100%; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.65rem 0.9rem; font-size: 0.875rem; color: #081120; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.dark .form-input { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: white; }
+.form-input:focus { outline: none; border-color: #84c248; box-shadow: 0 0 0 3px rgba(132,194,72,0.15); }
+.admin-label { font-size: 0.7rem; color: #6b7280; font-weight: 500; display: block; margin-bottom: 2px; }
+.mobile-link { font-size: 0.875rem; font-weight: 500; padding: 0.625rem 0.75rem; border-radius: 0.5rem; display: block; }
+.mobile-link:hover { background: rgba(132,194,72,0.1); color: #6ba334; }
+.dark .mobile-link:hover { color: #84c248; }
+
+/* Portfolio */
+.portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+.portfolio-item { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 4/3; background: rgba(13,28,52,0.5); border: 1px solid rgba(132,194,72,0.15); }
+.portfolio-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.portfolio-item:hover img { transform: scale(1.08); }
+.portfolio-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: rgba(132,194,72,0.4); font-size: 1.5rem; gap: 0.5rem; }
+
+/* Login modal */
+.login-modal { position: fixed; inset: 0; z-index: 9500; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.login-modal.open { display: flex; }
+
+/* Admin panel */
+.admin-panel-overlay { position: fixed; inset: 0; z-index: 8000; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.admin-panel-overlay.open { display: flex; }
+.admin-panel { background: #0d1c34; border: 1px solid rgba(132,194,72,0.3); border-radius: 16px; width: 95vw; max-width: 800px; max-height: 90vh; overflow-y: auto; padding: 2rem; color: white; }
+html:not(.dark) .admin-panel { background: #fff; border-color: rgba(16,63,109,0.2); color: #081120; }
+.admin-tab-btn { padding: 0.5rem 0.9rem; font-size: 0.75rem; font-weight: 600; border-bottom: 2px solid transparent; color: #9ca3af; margin-bottom: -1px; }
+.admin-tab-btn.active { border-color: #84c248; color: #a3d977; }
+.admin-tab-panel.hidden { display: none; }
+.upload-zone { border: 2px dashed rgba(132,194,72,0.4); border-radius: 12px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; }
+.upload-zone:hover { border-color: #84c248; background: rgba(132,194,72,0.05); }
+.admin-img-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; border: 2px solid rgba(132,194,72,0.2); }
+
+.toast-hidden { opacity: 0; transform: translateY(40px); pointer-events: none; }

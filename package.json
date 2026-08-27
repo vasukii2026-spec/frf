@@ -1,0 +1,22 @@
+{
+  "name": "asges-website",
+  "version": "1.0.0",
+  "description": "AS Global Engineering Solutions LLP - website with Express API + Postgres + Vercel Blob, fully admin-editable",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "db:setup": "node db/setup.js"
+  },
+  "dependencies": {
+    "@vercel/blob": "^0.27.0",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.1",
+    "pg": "^8.11.5"
+  }
+}

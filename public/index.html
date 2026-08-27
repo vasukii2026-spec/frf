@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-field="company_name">Company Website</title>
+    <meta name="description" content="AS Global Engineering Solutions — infrastructure consultancy, structural design, land surveying, material testing and project management across India.">
+    <meta name="theme-color" content="#103f6d">
+    <meta property="og:title" content="AS Global Engineering Solutions">
+    <meta property="og:description" content="Infrastructure consultancy, structural design, land surveying, material testing and project management across India.">
+    <meta property="og:image" content="/logo.PNG">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="/logo.PNG" type="image/png">
+    <link rel="apple-touch-icon" href="/logo.PNG">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        navy: { 900: '#081120', 800: '#0d1c34', 700: '#103f6d', 600: '#1a5a8a', 500: '#2f74a8' },
+                        lime: { 400: '#a3d977', 500: '#84c248', 600: '#6ba334', 700: '#557f29' },
+                        teal: { 400: '#6fb3e0', 500: '#4a93c9', 600: '#3574a3' }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-white dark:bg-navy-900 text-navy-900 dark:text-white font-sans overflow-x-hidden transition-colors duration-300">
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <!-- Loader -->
+    <div id="loader" class="loader-overlay">
+        <div class="text-center px-4">
+            <div class="logo-container mx-auto mb-4 w-20 h-20">
+                <img data-field-src="logo_url" src="/logo.PNG" alt="logo" onerror="this.style.display='none'">
+            </div>
+            <div class="loader-bar mx-auto mt-4"></div>
+            <p class="text-lime-500 font-mono font-semibold tracking-widest uppercase text-xs mt-4" data-field="company_name">Loading…</p>
+        </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="theme-toggle fixed top-24 right-6 z-50 w-12 h-12 rounded-full glass flex items-center justify-center text-xl shadow-lg border border-lime-500/20" onclick="toggleTheme()">
+        <i class="fas fa-sun text-yellow-500 dark:hidden"></i>
+        <i class="fas fa-moon text-lime-400 hidden dark:block"></i>
+    </button>
+
+    <!-- WhatsApp Float -->
+    <a data-field-whatsapp-href="general" target="_blank" class="whatsapp-float fixed bottom-8 right-8 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center text-white text-2xl shadow-2xl whatsapp-pulse hover:scale-110 transition-transform">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Admin Access -->
+    <button onclick="showLogin()" class="fixed bottom-8 left-8 z-50 w-10 h-10 rounded-full glass flex items-center justify-center text-sm shadow-lg border border-lime-500/20 opacity-40 hover:opacity-100 transition-opacity" title="Admin Panel">
+        <i class="fas fa-lock text-lime-500"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-40 transition-all duration-300 py-4 px-4 sm:px-6 lg:px-12">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="logo-container w-12 h-12 sm:w-14 sm:h-14">
+                    <img data-field-src="logo_url" src="/logo.PNG" alt="logo" class="w-full h-full object-contain p-1" onerror="this.style.display='none'">
+                </div>
+                <div class="min-w-0">
+                    <h1 class="text-lg sm:text-xl font-serif font-bold tracking-tight leading-tight truncate" data-field="company_short_name">Company</h1>
+                    <p class="text-[10px] font-mono text-gray-500 dark:text-gray-400 tracking-wider uppercase hidden sm:block" data-field="company_name">Full company name</p>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-3 lg:gap-6">
+                <a href="#home" class="nav-link text-xs lg:text-sm font-medium hover:text-lime-500 transition-colors">Home</a>
+                <a href="#about" class="nav-link text-xs lg:text-sm font-medium hover:text-lime-500 transition-colors">About</a>
+                <a href="#founder" class="nav-link text-xs lg:text-sm font-medium hover:text-lime-500 transition-colors hidden lg:block">Founder</a>
+                <a href="#services" class="nav-link text-xs lg:text-sm font-medium hover:text-lime-500 transition-colors">Services</a>
+                <a href="#portfolio" class="nav-link text-xs lg:text-sm font-medium hover:text-lime-500 transition-colors">Portfolio</a>
+                <a href="#clients" class="nav-link text-xs lg:text-sm font-medium hover:text-lime-500 transition-colors hidden lg:block">Clients</a>
+                <a href="#career" class="nav-link text-xs lg:text-sm font-medium hover:text-lime-500 transition-colors">Career</a>
+                <a href="#contact" class="btn-primary px-4 lg:px-6 py-2 bg-lime-600 hover:bg-lime-500 text-xs lg:text-sm font-semibold transition-all transform hover:scale-105 shadow-lg shadow-lime-500/20 text-white whitespace-nowrap">Contact Us</a>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-2xl text-navy-900 dark:text-white p-2"><i class="fas fa-bars"></i></button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white/95 dark:bg-navy-800/95 backdrop-blur-lg border-t border-lime-500/20 py-4 px-6 shadow-xl">
+            <div class="grid grid-cols-2 gap-1 mb-3">
+                <a href="#home" class="mobile-link">🏠 Home</a>
+                <a href="#about" class="mobile-link">ℹ️ About</a>
+                <a href="#founder" class="mobile-link">👤 Founder</a>
+                <a href="#services" class="mobile-link">⚙️ Services</a>
+                <a href="#portfolio" class="mobile-link">📸 Portfolio</a>
+                <a href="#clients" class="mobile-link">🤝 Clients</a>
+                <a href="#career" class="mobile-link">💼 Career</a>
+                <a href="#contact" class="mobile-link">📞 Contact</a>
+            </div>
+            <a href="#contact" class="block w-full text-center py-3 bg-lime-600 hover:bg-lime-500 rounded-xl text-sm font-bold text-white transition-colors mb-3">📞 Contact Us</a>
+            <a data-field-whatsapp-href="general" target="_blank" class="flex items-center justify-center gap-2 text-green-600 dark:text-green-400 font-semibold text-sm py-2">
+                <i class="fab fa-whatsapp text-lg"></i> Chat on WhatsApp
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12">
+        <!-- topographic contour decoration -->
+        <svg class="absolute right-[-10%] top-1/2 -translate-y-1/2 w-[70vw] max-w-3xl opacity-[0.08] dark:opacity-[0.12] pointer-events-none hidden sm:block" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <ellipse cx="300" cy="300" rx="280" ry="220" stroke="#84c248" stroke-width="1.5"/>
+            <ellipse cx="300" cy="300" rx="220" ry="170" stroke="#84c248" stroke-width="1.5"/>
+            <ellipse cx="300" cy="300" rx="160" ry="125" stroke="#4a93c9" stroke-width="1.5"/>
+            <ellipse cx="300" cy="300" rx="100" ry="80" stroke="#4a93c9" stroke-width="1.5"/>
+            <ellipse cx="300" cy="300" rx="45" ry="35" stroke="#84c248" stroke-width="1.5"/>
+        </svg>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10 grid lg:grid-cols-2 gap-10 items-center">
+            <div class="reveal">
+                <div class="eyebrow text-lime-600 dark:text-lime-400 mb-4">Trusted Engineering Partner</div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold leading-[1.05] tracking-tight mb-4" data-field="hero_tagline">Leading Infrastructure Consultancy</h2>
+                <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 text-sm sm:text-base max-w-lg" data-field="tagline">Company tagline goes here.</p>
+                <div class="flex flex-wrap gap-3">
+                    <a data-field-whatsapp-href="general" target="_blank" class="px-6 py-3 glass rounded-full font-semibold text-sm flex items-center gap-2 hover:bg-lime-500/10 transition-all border border-lime-500/20">
+                        <i class="fab fa-whatsapp text-green-500"></i> WhatsApp Us
+                    </a>
+                    <a href="#contact" class="btn-primary px-6 py-3 bg-lime-600 hover:bg-lime-500 font-semibold text-sm text-white transition-all">Get a Quote</a>
+                </div>
+                <div class="grid grid-cols-3 gap-4 mt-10 pt-8 border-t border-navy-900/10 dark:border-white/10">
+                    <div><p class="text-2xl sm:text-3xl font-serif font-bold text-lime-500 counter-value" data-target="10" id="stat-years-display">0</p><p class="text-[11px] font-mono uppercase tracking-wide text-gray-600 dark:text-gray-400 mt-1">Years Experience</p></div>
+                    <div><p class="text-2xl sm:text-3xl font-serif font-bold text-lime-500 counter-value" data-target="500" id="stat-projects-display">0</p><p class="text-[11px] font-mono uppercase tracking-wide text-gray-600 dark:text-gray-400 mt-1">Projects Done</p></div>
+                    <div><p class="text-2xl sm:text-3xl font-serif font-bold text-lime-500 counter-value" data-target="50" id="stat-team-display">0</p><p class="text-[11px] font-mono uppercase tracking-wide text-gray-600 dark:text-gray-400 mt-1">Team Members</p></div>
+                </div>
+            </div>
+            <div class="flex justify-center reveal">
+                <div class="tick-frame relative w-56 h-56 sm:w-72 sm:h-72 rounded-full glass border-4 border-lime-500/30 flex items-center justify-center animate-float">
+                    <img data-field-src="logo_url" src="/logo.PNG" alt="logo" class="w-full h-full object-contain p-6 sm:p-8" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="py-16 sm:py-24 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-12 text-center reveal">
+            <div class="logo-container w-24 h-24 mx-auto mb-6">
+                <img data-field-src="logo_url" src="/logo.PNG" alt="logo" class="w-full h-full object-contain" onerror="this.style.display='none'">
+            </div>
+            <div class="eyebrow center text-lime-600 dark:text-lime-400 mb-3">About Us</div>
+            <h2 class="section-title text-3xl sm:text-4xl font-serif font-bold mb-4">Engineering <span class="text-gradient">You Can Rely On</span></h2>
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base" data-field="about_text">About text goes here.</p>
+        </div>
+    </section>
+
+    <!-- Founder -->
+    <section id="founder" class="py-16 sm:py-24 bg-slate-50 dark:bg-navy-800/30 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+            <div class="text-center mb-12 reveal">
+                <div class="eyebrow center text-lime-600 dark:text-lime-400 mb-3">Leadership</div>
+                <h2 class="section-title text-3xl sm:text-4xl lg:text-5xl font-serif font-bold">Meet Our <span class="text-gradient">Founder</span></h2>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <div class="flex justify-center lg:justify-end reveal">
+                    <div class="tick-frame relative">
+                        <div class="absolute -inset-4 rounded-full border-2 border-lime-500/20 animate-spin-slow pointer-events-none"></div>
+                        <div class="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full overflow-hidden border-4 border-lime-500/50 shadow-2xl bg-navy-800 flex items-center justify-center">
+                            <img data-field-src="founder_photo_url" src="/founder.jpeg" alt="Founder" class="w-full h-full object-cover object-center" onerror="this.style.display='none'">
+                        </div>
+                        <div class="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap glass px-5 py-2 rounded-full border border-lime-500/30 shadow-lg text-center">
+                            <p class="font-bold text-sm" data-field="founder_name">Founder Name</p>
+                            <p class="text-xs text-lime-600 dark:text-lime-400 font-medium" data-field="founder_title">Founder Title</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-5 reveal mt-6 lg:mt-0">
+                    <div>
+                        <h3 class="text-2xl sm:text-3xl font-serif font-bold mb-1" data-field="founder_name">Founder Name</h3>
+                        <p class="text-lime-600 dark:text-lime-400 font-mono font-semibold text-xs tracking-widest uppercase" data-field="founder_title">Founder Title</p>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base" data-field="founder_bio">Founder bio goes here.</p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <a data-field-whatsapp-href="general" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-[#25D366]/20 hover:bg-[#25D366] text-green-700 dark:text-green-400 hover:text-white rounded-full text-sm font-semibold border border-green-500/30 transition-all">
+                            <i class="fab fa-whatsapp"></i> Connect on WhatsApp
+                        </a>
+                        <a data-field-tel-href="phone" class="inline-flex items-center gap-2 px-4 py-2 glass hover:bg-lime-500/10 rounded-full text-sm font-semibold border border-lime-500/20 transition-all">
+                            <i class="fas fa-phone text-lime-500"></i> <span data-field="phone">Phone</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="py-16 sm:py-24 bg-slate-100 dark:bg-navy-800/30 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+            <div class="text-center mb-12 reveal">
+                <div class="eyebrow center text-lime-600 dark:text-lime-400 mb-3">Capabilities</div>
+                <h2 class="section-title text-3xl sm:text-4xl lg:text-5xl font-serif font-bold">Our <span class="text-gradient">Services</span></h2>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="service-card glass rounded-2xl p-6 border border-lime-500/10 reveal">
+                    <div class="icon-badge badge-green"><i class="fas fa-road text-xl text-lime-500"></i></div>
+                    <h3 class="font-serif font-bold mb-2">Highway &amp; Road Engineering</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Survey, design &amp; construction supervision for road infrastructure.</p>
+                </div>
+                <div class="service-card glass rounded-2xl p-6 border border-lime-500/10 reveal">
+                    <div class="icon-badge badge-blue"><i class="fas fa-drafting-compass text-xl text-teal-500"></i></div>
+                    <h3 class="font-serif font-bold mb-2">Structural Design</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Structural analysis and design for buildings &amp; bridges.</p>
+                </div>
+                <div class="service-card glass rounded-2xl p-6 border border-lime-500/10 reveal">
+                    <div class="icon-badge badge-green"><i class="fas fa-map-marked-alt text-xl text-lime-500"></i></div>
+                    <h3 class="font-serif font-bold mb-2">Land Surveying</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Topographic &amp; boundary survey using modern equipment.</p>
+                </div>
+                <div class="service-card glass rounded-2xl p-6 border border-lime-500/10 reveal">
+                    <div class="icon-badge badge-blue"><i class="fas fa-flask text-xl text-teal-500"></i></div>
+                    <h3 class="font-serif font-bold mb-2">Material Testing</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Soil, concrete and material testing lab services.</p>
+                </div>
+                <div class="service-card glass rounded-2xl p-6 border border-lime-500/10 reveal">
+                    <div class="icon-badge badge-green"><i class="fas fa-hard-hat text-xl text-lime-500"></i></div>
+                    <h3 class="font-serif font-bold mb-2">Project Management</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">End-to-end project execution and quality supervision.</p>
+                </div>
+                <div class="service-card glass rounded-2xl p-6 border border-lime-500/10 reveal">
+                    <div class="icon-badge badge-blue"><i class="fas fa-file-invoice text-xl text-teal-500"></i></div>
+                    <h3 class="font-serif font-bold mb-2">Consultancy &amp; DPR</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Detailed project reports and technical consultancy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio -->
+    <section id="portfolio" class="py-16 sm:py-24 bg-slate-100 dark:bg-navy-800/20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+            <div class="text-center mb-10 reveal">
+                <div class="eyebrow center text-lime-600 dark:text-lime-400 mb-3">Selected Work</div>
+                <h2 class="section-title text-3xl sm:text-4xl lg:text-5xl font-serif font-bold">Our <span class="text-gradient">Portfolio</span></h2>
+            </div>
+            <div class="portfolio-grid" id="portfolio-grid">
+                <div class="portfolio-item"><div class="portfolio-placeholder"><i class="fas fa-image"></i><span class="text-xs mt-2">No projects yet</span></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clients -->
+    <section id="clients" class="py-16 sm:py-24 bg-slate-100 dark:bg-navy-800/20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+            <div class="text-center mb-10 reveal">
+                <div class="eyebrow center text-lime-600 dark:text-lime-400 mb-3">Partners</div>
+                <h2 class="section-title text-3xl sm:text-4xl lg:text-5xl font-serif font-bold">Our <span class="text-gradient">Clients</span></h2>
+            </div>
+            <div id="clients-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+    </section>
+
+    <!-- Career -->
+    <section id="career" class="py-16 sm:py-24 bg-white dark:bg-navy-800/10 relative">
+        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-12">
+            <div class="text-center mb-10 reveal">
+                <div class="eyebrow center text-lime-600 dark:text-lime-400 mb-3">Careers</div>
+                <h2 class="section-title text-3xl sm:text-4xl lg:text-5xl font-serif font-bold">Join Our <span class="text-gradient">Team</span></h2>
+            </div>
+            <form id="career-form" onsubmit="submitCareer(event)" class="space-y-4 reveal">
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div><label class="text-sm font-medium block mb-1">Full Name *</label><input type="text" id="career-name" required class="form-input"></div>
+                    <div><label class="text-sm font-medium block mb-1">Phone Number *</label><input type="tel" id="career-phone" required class="form-input" placeholder="+91 XXXXX XXXXX"></div>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div><label class="text-sm font-medium block mb-1">Email Address</label><input type="email" id="career-email" class="form-input"></div>
+                    <div><label class="text-sm font-medium block mb-1">Position Applying For</label><input type="text" id="career-position" class="form-input"></div>
+                </div>
+                <div><label class="text-sm font-medium block mb-1">Qualification</label><input type="text" id="career-exp" class="form-input"></div>
+                <div><label class="text-sm font-medium block mb-1">Message</label><textarea id="career-message" rows="3" class="form-input"></textarea></div>
+                <button type="submit" class="btn-primary w-full py-3 bg-lime-600 hover:bg-lime-500 font-semibold text-white transition-all flex items-center justify-center gap-2"><i class="fas fa-paper-plane"></i> Submit Application</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-16 sm:py-24 relative">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12">
+            <div class="text-center mb-10 reveal">
+                <div class="eyebrow center text-lime-600 dark:text-lime-400 mb-3">Contact</div>
+                <h2 class="section-title text-3xl sm:text-4xl lg:text-5xl font-serif font-bold">Get In <span class="text-gradient">Touch</span></h2>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-10">
+                <div class="space-y-6 reveal">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-lime-500/20 rounded-full flex items-center justify-center text-lime-600 dark:text-lime-400 border border-lime-500/20 flex-shrink-0"><i class="fas fa-phone text-lg sm:text-xl"></i></div>
+                        <div><h4 class="font-semibold">Phone</h4><a data-field-tel-href="phone" class="text-gray-500 dark:text-gray-400 hover:text-lime-600 transition-colors text-sm sm:text-base" data-field="phone">Phone</a></div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-lime-500/20 rounded-full flex items-center justify-center text-lime-600 dark:text-lime-400 border border-lime-500/20 flex-shrink-0"><i class="fab fa-whatsapp text-lg sm:text-xl"></i></div>
+                        <div><h4 class="font-semibold">WhatsApp</h4><a data-field-whatsapp-href="general" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-lime-600 transition-colors text-sm sm:text-base">Chat with us directly</a></div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-lime-500/20 rounded-full flex items-center justify-center text-lime-600 dark:text-lime-400 border border-lime-500/20 flex-shrink-0"><i class="fas fa-map-marker-alt text-lg sm:text-xl"></i></div>
+                        <div><h4 class="font-semibold">Address</h4><p class="text-gray-500 dark:text-gray-400 text-sm sm:text-base" data-field="address">Address</p></div>
+                    </div>
+                </div>
+                <form id="contact-form" onsubmit="submitContact(event)" class="space-y-4 reveal">
+                    <div><label class="text-sm font-medium block mb-1">Full Name *</label><input type="text" id="form-name" required class="form-input"></div>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div><label class="text-sm font-medium block mb-1">Phone Number *</label><input type="tel" id="form-phone" required class="form-input"></div>
+                        <div><label class="text-sm font-medium block mb-1">Email</label><input type="email" id="form-email" class="form-input"></div>
+                    </div>
+                    <div><label class="text-sm font-medium block mb-1">Service Needed</label><input type="text" id="form-service" class="form-input"></div>
+                    <div><label class="text-sm font-medium block mb-1">Message</label><textarea id="form-message" rows="3" class="form-input"></textarea></div>
+                    <button type="submit" class="btn-primary w-full py-3 bg-lime-600 hover:bg-lime-500 font-semibold text-white transition-all flex items-center justify-center gap-2"><i class="fab fa-whatsapp"></i> Send Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 border-t border-gray-200 dark:border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 text-center space-y-3">
+            <div class="flex items-center justify-center gap-3">
+                <div class="footer-logo"><img data-field-src="logo_url" src="/logo.PNG" alt="logo" class="w-full h-full object-contain p-1" onerror="this.style.display='none'"></div>
+                <span class="font-serif font-bold text-lg" data-field="company_short_name">Company</span>
+            </div>
+            <p class="text-sm text-gray-500" data-field="address">Address</p>
+            <a data-field-tel-href="phone" class="text-sm text-lime-600 dark:text-lime-400 block" data-field="phone">Phone</a>
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-1 mt-3 text-[11px] font-mono text-gray-500">
+                <span><span class="font-semibold text-gray-600 dark:text-gray-400">Udyam Reg:</span> <span data-field="udyam_reg"></span></span>
+                <span><span class="font-semibold text-gray-600 dark:text-gray-400">GSTIN:</span> <span data-field="gstin"></span></span>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-500">&copy; <span id="footer-year"></span> <span data-field="company_name">Company</span>. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-24 right-4 sm:right-8 bg-lime-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg shadow-2xl z-50 flex items-center gap-3 font-semibold transition-all duration-300 toast-hidden">
+        <i class="fas fa-check-circle text-xl"></i>
+        <div><h4 class="font-bold text-sm sm:text-base" id="toast-title">Done!</h4><p class="text-xs sm:text-sm opacity-90" id="toast-msg">Success.</p></div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="glass rounded-2xl p-8 w-full max-w-sm mx-4 border border-lime-500/30">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-lime-500/20 rounded-full flex items-center justify-center mx-auto mb-3 border border-lime-500/30"><i class="fas fa-lock text-2xl text-lime-500"></i></div>
+                <h2 class="text-xl font-serif font-bold">Admin Login</h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" data-field="company_name">Company</p>
+            </div>
+            <div class="space-y-4">
+                <div><label class="text-sm font-medium block mb-1">Username</label><input type="text" id="admin-id" class="form-input" placeholder="Enter Admin ID"></div>
+                <div><label class="text-sm font-medium block mb-1">Password</label><input type="password" id="admin-pass" class="form-input" placeholder="Enter Password" onkeydown="if(event.key==='Enter') doLogin()"></div>
+                <div id="login-error" class="hidden text-red-500 text-sm text-center bg-red-500/10 rounded-lg py-2 px-3"></div>
+                <button onclick="doLogin()" class="w-full py-3 bg-lime-600 hover:bg-lime-500 rounded-lg font-semibold text-white transition-all">Login to Admin Panel</button>
+                <button onclick="closeLogin()" class="w-full py-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel-overlay" id="adminPanel">
+        <div class="admin-panel">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-xl font-serif font-bold flex items-center gap-2"><i class="fas fa-shield-halved text-lime-500"></i> Admin Panel</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Everything here is saved to your database — visible to all visitors immediately.</p>
+                </div>
+                <button onclick="closeAdmin()" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="flex gap-1 mb-6 border-b border-gray-200 dark:border-white/10 pb-0 flex-wrap" id="admin-tabs">
+                <button onclick="adminTab('content')" data-tab="content" class="admin-tab-btn">✏️ Company Info</button>
+                <button onclick="adminTab('portfolio')" data-tab="portfolio" class="admin-tab-btn">📸 Portfolio</button>
+                <button onclick="adminTab('clients')" data-tab="clients" class="admin-tab-btn">🤝 Clients</button>
+                <button onclick="adminTab('leads')" data-tab="leads" class="admin-tab-btn">📥 Inquiries</button>
+                <button onclick="adminTab('account')" data-tab="account" class="admin-tab-btn">🔑 Account</button>
+            </div>
+
+            <!-- Company Info Tab -->
+            <div id="admin-tab-content" class="admin-tab-panel">
+                <div class="glass rounded-xl p-4 border border-lime-500/10 mb-4">
+                    <h4 class="font-semibold text-sm mb-3">Identity</h4>
+                    <div class="space-y-2">
+                        <div><label class="admin-label">Company Name (full, official)</label><input id="edit-company_name" class="form-input"></div>
+                        <div><label class="admin-label">Company Short Name (nav/footer)</label><input id="edit-company_short_name" class="form-input"></div>
+                        <div><label class="admin-label">Hero Tagline</label><input id="edit-hero_tagline" class="form-input"></div>
+                        <div><label class="admin-label">Tagline (hero subtext)</label><textarea id="edit-tagline" rows="2" class="form-input"></textarea></div>
+                        <div><label class="admin-label">About Text</label><textarea id="edit-about_text" rows="3" class="form-input"></textarea></div>
+                    </div>
+                </div>
+                <div class="glass rounded-xl p-4 border border-lime-500/10 mb-4">
+                    <h4 class="font-semibold text-sm mb-3">Logo</h4>
+                    <div class="flex items-center gap-3 mb-2">
+                        <img id="logo-preview-img" class="w-14 h-14 object-contain bg-white rounded-lg border p-1" src="/logo.PNG">
+                        <input type="file" id="logo-file-input" accept="image/*" class="text-xs flex-1">
+                    </div>
+                    <p class="text-xs text-gray-500">Uploading replaces the logo everywhere on the site (nav, hero, footer).</p>
+                </div>
+                <div class="glass rounded-xl p-4 border border-lime-500/10 mb-4">
+                    <h4 class="font-semibold text-sm mb-3">Contact Details</h4>
+                    <div class="space-y-2">
+                        <div><label class="admin-label">Phone (displayed, e.g. +91 79922 01078)</label><input id="edit-phone" class="form-input"></div>
+                        <div><label class="admin-label">WhatsApp Number (digits only with country code, e.g. 917992201078)</label><input id="edit-whatsapp_number" class="form-input"></div>
+                        <div><label class="admin-label">Email</label><input id="edit-email" class="form-input"></div>
+                        <div><label class="admin-label">Address</label><textarea id="edit-address" rows="2" class="form-input"></textarea></div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div><label class="admin-label">Udyam Registration</label><input id="edit-udyam_reg" class="form-input"></div>
+                            <div><label class="admin-label">GSTIN</label><input id="edit-gstin" class="form-input"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass rounded-xl p-4 border border-lime-500/10 mb-4">
+                    <h4 class="font-semibold text-sm mb-3">Founder / CEO</h4>
+                    <div class="flex items-center gap-3 mb-2">
+                        <img id="founder-preview-img" class="w-14 h-14 object-cover rounded-full border" src="/founder.jpeg">
+                        <input type="file" id="founder-file-input" accept="image/*" class="text-xs flex-1">
+                    </div>
+                    <div class="space-y-2">
+                        <div><label class="admin-label">Name</label><input id="edit-founder_name" class="form-input"></div>
+                        <div><label class="admin-label">Title</label><input id="edit-founder_title" class="form-input"></div>
+                        <div><label class="admin-label">Bio</label><textarea id="edit-founder_bio" rows="3" class="form-input"></textarea></div>
+                    </div>
+                </div>
+                <div class="glass rounded-xl p-4 border border-lime-500/10 mb-4">
+                    <h4 class="font-semibold text-sm mb-3">Stats / Counters</h4>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div><label class="admin-label">Years Exp</label><input id="edit-stat_years" type="number" class="form-input"></div>
+                        <div><label class="admin-label">Projects</label><input id="edit-stat_projects" type="number" class="form-input"></div>
+                        <div><label class="admin-label">Team Size</label><input id="edit-stat_team" type="number" class="form-input"></div>
+                    </div>
+                </div>
+                <button onclick="saveSiteSettings()" class="w-full py-2.5 bg-lime-600 hover:bg-lime-500 rounded-lg text-sm font-semibold text-white transition-all flex items-center justify-center gap-1"><i class="fas fa-save"></i> Save All Changes</button>
+            </div>
+
+            <!-- Portfolio Tab -->
+            <div id="admin-tab-portfolio" class="admin-tab-panel hidden">
+                <div class="upload-zone mb-4" onclick="document.getElementById('portfolio-file-input').click()">
+                    <input type="file" id="portfolio-file-input" accept="image/*" multiple class="hidden" onchange="handlePortfolioUpload(this.files)">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-lime-500/50 mb-2 block"></i>
+                    <p class="text-gray-600 dark:text-gray-400 font-semibold">Click to upload project photos</p>
+                    <p class="text-xs text-gray-500 mt-1">JPG, PNG, WebP — multiple files supported</p>
+                </div>
+                <div id="admin-portfolio-list" class="grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
+            </div>
+
+            <!-- Clients Tab -->
+            <div id="admin-tab-clients" class="admin-tab-panel hidden">
+                <div class="glass rounded-xl p-4 border border-lime-500/10 mb-4">
+                    <h4 class="font-semibold text-sm mb-3">Add New Client</h4>
+                    <div class="space-y-2">
+                        <input id="client-name-input" type="text" placeholder="Client / Organization Name" class="form-input">
+                        <input id="client-desc-input" type="text" placeholder="Description (optional)" class="form-input">
+                        <input type="file" id="client-img-input" accept="image/*" class="text-xs">
+                        <button onclick="addClientFromAdmin()" class="w-full py-2 bg-lime-600 hover:bg-lime-500 rounded-lg text-xs font-semibold text-white transition-all"><i class="fas fa-plus"></i> Add Client</button>
+                    </div>
+                </div>
+                <div id="admin-clients-list" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+            </div>
+
+            <!-- Leads / Inquiries Tab -->
+            <div id="admin-tab-leads" class="admin-tab-panel hidden">
+                <h4 class="font-semibold text-sm mb-2">Recent Contact Inquiries</h4>
+                <div id="admin-contact-list" class="space-y-2 max-h-60 overflow-y-auto pr-1 mb-4"></div>
+                <h4 class="font-semibold text-sm mb-2">Recent Career Applications</h4>
+                <div id="admin-career-list" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+            </div>
+
+            <!-- Account Tab -->
+            <div id="admin-tab-account" class="admin-tab-panel hidden">
+                <div class="glass rounded-xl p-4 border border-teal-500/10">
+                    <h4 class="font-semibold text-sm mb-2">Change Admin Password</h4>
+                    <div class="flex gap-2">
+                        <input id="new-admin-pass" type="password" placeholder="New password (min 6 chars)" class="form-input flex-1">
+                        <button onclick="changeAdminPass()" class="px-4 py-2 bg-teal-600 hover:bg-teal-500 rounded-lg text-xs font-semibold text-white transition-all">Change</button>
+                    </div>
+                </div>
+                <button onclick="doLogout()" class="w-full mt-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg text-sm font-semibold transition-all"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>
