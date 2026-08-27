@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASGES — One-time DB Setup</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 480px; margin: 60px auto; padding: 0 20px; color: #103f6d; }
+  h1 { font-size: 1.3rem; }
+  label { display: block; margin-top: 16px; font-weight: 600; font-size: 0.9rem; }
+  input { width: 100%; padding: 10px; margin-top: 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; box-sizing: border-box; }
+  button { margin-top: 24px; width: 100%; padding: 12px; background: #103f6d; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+  button:disabled { opacity: 0.6; cursor: default; }
+  pre { white-space: pre-wrap; word-break: break-word; background: #f4f4f4; padding: 12px; border-radius: 6px; margin-top: 20px; font-size: 0.85rem; }
+  .ok { color: #2e7d32; }
+  .err { color: #c62828; }
+  p.hint { font-size: 0.85rem; color: #555; }
+</style>
+</head>
+<body>
+  <h1>ASGES — one-time admin setup</h1>
+  <p class="hint">Creates the database tables (if missing) and creates/resets the admin login.
+  You only need this once. Requires <code>SETUP_SECRET</code> to already be set in Vercel.</p>
+
+  <label>Setup secret (SETUP_SECRET from Vercel)</label>
+  <input type="password" id="secret" placeholder="the value you put in Vercel">
+
+  <label>Admin username</label>
+  <input type="text" id="username" value="admin">
+
+  <label>Admin password (6+ characters)</label>
+  <input type="password" id="password" placeholder="choose a real password">
+
+  <button id="btn" onclick="runSetup()">Run setup</button>
+
+  <pre id="out" style="display:none"></pre>
+
+<script>
+async function runSetup() {
+  const btn = document.getElementById('btn');
+  const out = document.getElementById('out');
+  const secret = document.getElementById('secret').value.trim();
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+
+  out.style.display = 'block';
+  out.className = '';
+  out.textContent = 'Running...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/setup-admin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, username, password }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      out.className = 'ok';
+      out.textContent = 'Success!\n\n' + JSON.stringify(data, null, 2) +
+        '\n\nYou can now log in on the main site with that username and password.';
+    } else {
+      out.className = 'err';
+      out.textContent = 'Error:\n\n' + JSON.stringify(data, null, 2);
+    }
+  } catch (e) {
+    out.className = 'err';
+    out.textContent = 'Request failed: ' + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>

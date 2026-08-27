@@ -7,6 +7,11 @@ company name, logo, address, phone, founder photo/bio, clients, portfolio photos
 and stats — plus contact & career form submissions are saved and viewable in the
 admin panel.
 
+**Tables and the admin login are created automatically** — there is no
+manual "run this script" step. The app creates whatever's missing the first
+time it handles a request after each deploy, as long as the environment
+variables below are set.
+
 ## What's inside
 
 ```
@@ -14,11 +19,13 @@ server.js          Express app (routes, static file serving)
 api/index.js        Vercel serverless entrypoint (wraps server.js)
 vercel.json          Vercel routing config
 db/schema.sql        Postgres tables
-db/setup.js           One-time script: creates tables + first admin login
-routes/               auth, site-settings, clients, portfolio, contact, career, upload
+db/ensureSetup.js     Runs automatically: creates tables + admin login if missing
+db/setup.js           Optional: same thing, run manually from a local terminal
+routes/               auth, site-settings, clients, portfolio, contact, career, upload, setup-admin
 middleware/auth.js    JWT-based admin authentication
 public/index.html    The website (all content loaded from the API, nothing hardcoded)
 public/app.js         Front-end logic + admin panel
+public/setup.html     Optional manual password-reset page (see Troubleshooting)
 public/styles.css     Styling (same navy/lime design as before)
 ```
 
@@ -29,7 +36,7 @@ You need a Postgres database. The easiest options:
 - **Vercel Postgres**: In your Vercel project → Storage tab → Create → Postgres.
   It gives you a `POSTGRES_URL` automatically.
 - **Neon** (neon.tech) or **Supabase**: both have a free tier; copy their
-  connection string.
+  connection string, or connect Neon via Vercel's Storage tab integration.
 
 ## 2. Set up image storage (Vercel Blob)
 
@@ -41,33 +48,26 @@ In your Vercel project → Storage tab → Create → Blob store. Connect it to 
 project — this automatically sets `BLOB_READ_WRITE_TOKEN` as an environment
 variable for you.
 
-## 3. Environment variables
+## 3. Environment variables — this is the step that actually matters
 
-Copy `.env.example` to `.env` (for local dev) and fill in:
+Set these in Vercel → your project → Settings → Environment Variables, for
+**Production** (tick that checkbox for each one):
 
-- `POSTGRES_URL` — from step 1
-- `BLOB_READ_WRITE_TOKEN` — from step 2 (skip locally if you just want to test
-  text fields; image upload will show a clear error until this is set)
-- `JWT_SECRET` — any long random string
-- `ADMIN_DEFAULT_USERNAME` / `ADMIN_DEFAULT_PASSWORD` — your first login,
-  used only once by the setup script
+- `POSTGRES_URL` — from step 1 (often added automatically by the integration —
+  check it's actually there and says "Production")
+- `BLOB_READ_WRITE_TOKEN` — from step 2
+- `JWT_SECRET` — any long random string you type in yourself
+- `ADMIN_DEFAULT_USERNAME` — e.g. `admin`
+- `ADMIN_DEFAULT_PASSWORD` — your real starting password, 6+ characters
 
-On Vercel, add the same variables under Project → Settings → Environment
-Variables (POSTGRES_URL and BLOB_READ_WRITE_TOKEN are added automatically
-when you create/connect the stores in steps 1–2; add JWT_SECRET and the
-ADMIN_DEFAULT_* ones yourself).
+Once all five are set, **redeploy** (env var changes never apply to a
+deployment that already exists — you must trigger a new one). On that first
+request after deploying, the app creates the tables and your admin account
+from `ADMIN_DEFAULT_USERNAME`/`ADMIN_DEFAULT_PASSWORD` by itself. Log in with
+those, then change the password from the admin panel's Account tab.
 
-## 4. Install dependencies & create tables
-
-```bash
-npm install
-npm run db:setup
-```
-
-This creates all tables and one admin login (`ADMIN_DEFAULT_USERNAME` /
-`ADMIN_DEFAULT_PASSWORD`, default `admin` / `change-me-now` if you didn't set
-them). **Log in and change this password immediately** from the admin panel's
-Account tab.
+For local development, copy `.env.example` to `.env` and fill in the same
+values, then `npm install && npm start`.
 
 ## 5. Run locally
 
@@ -151,17 +151,19 @@ that's a static-file bundling issue, not the database — make sure
 `vercel.json` still has the `"functions": { "api/index.js": { "includeFiles":
 "public/**" } }` block, then redeploy.
 
-## Fix the admin login on Neon (or any Postgres) directly on Vercel
+## Forgot the admin password, or need to reset it
 
-If `/api/health` shows the database connected and tables present but you
-still get "Invalid ID or password" — there's simply no admin user yet (or
-the password doesn't match what you're typing), and you don't need a local
-Node setup pointed at Neon to fix it:
+Tables and the *first* admin account are created automatically (see step 3
+above). If you later forget that password, use this to reset it without
+touching the database directly:
 
 1. In Vercel → your project → Settings → Environment Variables, add
    `SETUP_SECRET` (any long random string) for Production, then redeploy.
-2. Call this once (replace the placeholders — do this from a terminal, not
-   a browser address bar, since it's a POST request):
+2. **Easiest way — no terminal needed:** visit
+   `https://your-site.vercel.app/setup.html`, fill in the secret, a username,
+   and a password, and click "Run setup".
+
+   Or, if you prefer a terminal, call this once (replace the placeholders):
    ```bash
    curl -X POST https://your-site.vercel.app/api/setup-admin \
      -H "Content-Type: application/json" \

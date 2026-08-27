@@ -12,12 +12,26 @@ const contactRoutes = require('./routes/contact');
 const careerRoutes = require('./routes/career');
 const uploadRoutes = require('./routes/upload');
 const setupRoutes = require('./routes/setup');
+const { ensureSetupOnce } = require('./db/ensureSetup');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
+
+// Self-healing: create tables + a default admin automatically, the first
+// time this warm instance handles a request. No manual setup step needed
+// as long as POSTGRES_URL is set. Failures here don't block the request —
+// the route itself (or /api/health) will surface a clear error instead.
+app.use(async (req, res, next) => {
+  try {
+    await ensureSetupOnce();
+  } catch (e) {
+    // swallow — individual routes/health already report DB problems clearly
+  }
+  next();
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/site-settings', siteRoutes);
@@ -70,10 +84,10 @@ app.get('/api/health', async (req, res) => {
       tables_missing: missing,
       admin_users: adminUsernames,
       note: missing.length
-        ? `Connected fine, but these tables don't exist yet: ${missing.join(', ')}. See "Fix the admin login on Neon" in README.md.`
+        ? `Auto-setup should have created these automatically but didn't: ${missing.join(', ')}. Check Vercel's function logs for an "[auto-setup] Failed" message — it usually means the DB user lacks CREATE TABLE permission, or the connection dropped mid-query. Reloading this page retries it.`
         : adminUsernames.length === 0
-        ? 'Connected and tables exist, but there is no admin user yet — that\'s why login fails. See "Fix the admin login on Neon" in README.md.'
-        : 'Database connected, tables present, admin user(s) exist. If login still fails, the password doesn\'t match — use the /api/setup-admin endpoint (see README) to reset it.',
+        ? 'Tables exist but no admin user was created. Set ADMIN_DEFAULT_USERNAME and ADMIN_DEFAULT_PASSWORD in Vercel and redeploy — auto-setup creates the admin account from those on the next request.'
+        : 'Database connected, tables present, admin user(s) exist. If login still fails, the password doesn\'t match what ADMIN_DEFAULT_PASSWORD was set to — see README to reset it.',
     });
   } catch (err) {
     res.status(500).json({

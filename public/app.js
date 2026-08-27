@@ -266,9 +266,9 @@ async function doLogin() {
       } else if (health.database === 'connection failed') {
         msg = `Cannot reach the database: ${health.error || 'unknown error'} (see /api/health).`;
       } else if (Array.isArray(health.tables_missing) && health.tables_missing.length) {
-        msg = `Database tables not set up yet (missing: ${health.tables_missing.join(', ')}). See README "Fix the admin login on Neon".`;
+        msg = `Database tables missing (${health.tables_missing.join(', ')}) and auto-setup didn't create them — check Vercel's function logs for details, or just reload this page to retry.`;
       } else if (Array.isArray(health.admin_users) && health.admin_users.length === 0) {
-        msg = 'No admin account exists yet. Use the /api/setup-admin endpoint (see README) to create one.';
+        msg = 'No admin account yet. Set ADMIN_DEFAULT_USERNAME and ADMIN_DEFAULT_PASSWORD in Vercel and redeploy — it\'s created automatically on the next request.';
       } else if (Array.isArray(health.admin_users) && health.admin_users.length && !health.admin_users.includes(username)) {
         msg = `No admin account named "${username}" exists. Existing username(s): ${health.admin_users.join(', ')}.`;
       } else {
