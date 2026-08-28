@@ -88,6 +88,8 @@ app.get('/api/health', async (req, res) => {
       adminUsernames = admins.rows.map((r) => r.username);
     }
 
+    const { source: blobTokenSource } = uploadRoutes.resolveBlobToken();
+
     res.json({
       ok: result.rows[0].ok === 1 && missing.length === 0 && adminUsernames.length > 0,
       database: 'connected',
@@ -95,6 +97,7 @@ app.get('/api/health', async (req, res) => {
       tables_found: tableNames,
       tables_missing: missing,
       admin_users: adminUsernames,
+      blob_storage: blobTokenSource ? `configured (${blobTokenSource})` : 'not configured — image uploads will fail until a Blob store is connected',
       note: missing.length
         ? `Auto-setup should have created these automatically but didn't: ${missing.join(', ')}. Check Vercel's function logs for an "[auto-setup] Failed" message — it usually means the DB user lacks CREATE TABLE permission, or the connection dropped mid-query. Reloading this page retries it.`
         : adminUsernames.length === 0
