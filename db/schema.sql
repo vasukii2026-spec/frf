@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS site_settings (
     phone               TEXT NOT NULL DEFAULT '+91 92343 67036',
     whatsapp_number     TEXT NOT NULL DEFAULT '919234367036',
     email               TEXT NOT NULL DEFAULT '',
-    address             TEXT NOT NULL DEFAULT 'Building No: 37, Mayur Vihar, Ashoka Garden, Bhopal (MP) - 462023',
+    address             TEXT NOT NULL DEFAULT 'MIG-76, Housing Board Colony, Old Subhash Nagar, Bhopal - 462023 (M.P.)',
     udyam_reg           TEXT NOT NULL DEFAULT 'UDYAM-MP-10-0158693',
     gstin               TEXT NOT NULL DEFAULT '23AMXPI4407L1ZP',
     founder_name        TEXT NOT NULL DEFAULT 'Md Imran',
