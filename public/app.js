@@ -77,7 +77,13 @@ function renderSettings(s) {
 
   document.querySelectorAll('[data-field-src]').forEach((el) => {
     const key = el.getAttribute('data-field-src');
-    if (s[key]) el.src = s[key];
+    if (s[key]) {
+      // An earlier failed load (e.g. before Blob storage was configured)
+      // can leave this element hidden via its onerror handler. A fresh,
+      // successful URL should always make it visible again.
+      el.style.display = '';
+      el.src = s[key];
+    }
   });
 
   document.querySelectorAll('[data-field-tel-href]').forEach((el) => {

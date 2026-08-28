@@ -60,7 +60,24 @@ function listDbRelatedEnvVarNames() {
   return Object.keys(process.env).filter((k) => pattern.test(k)).sort();
 }
 
-const { value: connectionString, source } = resolveConnectionString();
+const { value: rawConnectionString, source } = resolveConnectionString();
+
+// Neon (and other providers) append ?sslmode=require to their connection
+// strings. We already configure SSL explicitly via the `ssl` option below,
+// so this param is redundant — and pg-connection-string prints a noisy
+// deprecation warning on every single connection because of it. Strip it
+// so logs stay readable and actual errors don't get lost in the noise.
+let connectionString = rawConnectionString;
+if (connectionString) {
+  try {
+    const url = new URL(connectionString);
+    url.searchParams.delete('sslmode');
+    url.searchParams.delete('channel_binding');
+    connectionString = url.toString();
+  } catch (e) {
+    // Malformed URL — leave it as-is, pg will report its own clear error.
+  }
+}
 
 if (!connectionString) {
   console.warn('[db] WARNING: No usable Postgres connection string found in any environment variable. Set POSTGRES_URL (or DATABASE_URL) in your Vercel project settings — see README.md.');

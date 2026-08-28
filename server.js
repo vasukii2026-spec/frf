@@ -16,6 +16,18 @@ const { ensureSetupOnce } = require('./db/ensureSetup');
 
 const app = express();
 
+// This site's data changes constantly through the admin panel (add a
+// client, upload a portfolio photo, etc.) and every response must reflect
+// the database's current state immediately. Express enables weak ETags by
+// default, which can lead to 304 Not Modified responses that leave stale
+// data displayed until a hard refresh. Disable that here, and explicitly
+// tell every client/proxy never to cache API responses.
+app.set('etag', false);
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  next();
+});
+
 app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
